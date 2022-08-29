@@ -50,10 +50,12 @@ const makeUser = async () => {
     state: "New York",
     country: "USA",
   });
-  //creates (users)collection in (relationship-db)db and/or add newUser(document) into relationship-db(collection)
+  //creates (users)collection in (relationship-db)db and/or add newUser(document) into (users)collection
   const savedUser = await newUser.save();
 };
-// makeUser().catch((e) => console.log(e));
+//makeUser().catch((e) => {
+//   console.log(e);
+// });
 
 const addAddress = async (id) => {
   //find  modelInstanceObject(ie document) with specified id
