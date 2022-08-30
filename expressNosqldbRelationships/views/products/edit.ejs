@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+  </head>
+  <body>
+    <h1>Edit product</h1>
+    <!--http structured POST request form-->
+    <!--form data not sent via ?queryString(can exist) but sent via request body-->
+    <!--form data middlewareMethod of expressAppObject - converts request body into req.body-->
+    <!--ie jsObject-{key/name:inputValue,key/name:inputValue,key/name:inputValue}-->
+    <!--browser forms can only make POST and GET method (http structured) requests-->
+    <!--using method-override npm package - middlewareFunction("key") -->
+    <!--when (http structured) POST request arrives it changes the req.method from POST to PUT-->
+    <!--adding ?queryString to /resource/:id/?key=value-->
+    <!--we set value for key(_method) with alternative to POST ie.PUT-->
+    <form action="/products/<%= product._id %>?_method=PUT" method="POST">
+      <!-- match for to id -->
+      <label for="name">Product Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="product name"
+        value="<%=product.name%>"
+      />
+      <label for="price">Price (Unit)</label>
+      <input
+        type="number"
+        id="price"
+        name="price"
+        placeholder="product price"
+        value="<%=product.price%>"
+      />
+      <label for="category">Select Category</label>
+      <select name="category" id="category">
+        <!--terinary operator returns "selected" boolean attribute-->
+        <% for(let category of categories){%>
+        <option value="<%=category%>" <%= product.category === category ? "selected" : "" %>><%=category%></option>
+        <%}%>
+      </select>
+      <button>Save</button>
+    </form>
+    <a href="/products/<%=product._id%>">Cancel</a>
+    <!--(http structured) GET request-->
+  </body>
+</html>
