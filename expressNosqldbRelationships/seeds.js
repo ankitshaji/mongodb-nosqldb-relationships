@@ -1,4 +1,4 @@
-//isolated seeds.js file, run file to seed(ie add initial data) to our db(farmStanddb)
+//isolated seeds.js file, run file to seed(ie add initial data) to our db(farmStanddb3)
 //specifically seed(ie add intial data) to the products collection
 
 //mongoose ODM - has callback but also supports promises-ie returns promiseObject (pending,undefined) to -resove(value)(fullfulled,value) or reject(errorMessage)(rejected,errorMessage)
@@ -10,7 +10,7 @@ const Product = require("./models/product"); //productClassObject(ie Model) //se
 // *******************************************
 //mongooseObject.method(url/defaultPortNo/databaseToUse,optionsObject-notNeeded) //returns promiseObject pending
 mongoose
-  .connect("mongodb://localhost:27017/farmStanddb", {
+  .connect("mongodb://localhost:27017/farmStanddb3", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -44,7 +44,7 @@ const p = new Product({
   category: "fruit",
 });
 //modelInstance.save() returns promiseObject - pending to resolved(dataObject),rejected(errorObject)
-//creates (products)collection in (farmStanddb)db and adds (p)document into the (products)collection //auto pluralisation of Product to products collection
+//creates (products)collection in (farmStanddb3)db and adds (p)document into the (products)collection //auto pluralisation of Product to products collection
 // p.save()
 //   .then((data) => {
 //     console.log("promise resolved(dataObject)");

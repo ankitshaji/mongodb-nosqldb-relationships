@@ -84,9 +84,9 @@ const makeTweet = async () => {
 
 const findTweet = async () => {
   //find first modelInstanceObject(ie document) that matches queryObject -> Tweet.findOne(queryObejct}) -> thenableObject(pending,undefined)
-  //thenableObject(resolved,valueObject).queryBuilderMethod("users") = new thenableObject(pending,undefined)
-  //new thenableObject(pending,undefined) -> finds modelInstanceObject(ie document) from users(collection) that has matching id in users property
-  //the populate("users")(queryBuilderMedthod()) then combines its valueObject with the previousValueObject to create the newValueObject
+  //thenableObject(resolved,valueObject).queryBuilderMethod("user") = new thenableObject(pending,undefined)
+  //new thenableObject(pending,undefined) -> finds modelInstanceObject(ie document) from users(collection) that has matching id in user property
+  //the populate("user")(queryBuilderMedthod()) then combines its valueObject with the previousValueObject to create the newValueObject
   //thus newValueObject is the output after populating the ID from the previousValueObjects user property with the document from currentValueObject
   //NOTE - can populate only specific piece of document instead of entire document
   //const foundTweet = await Tweet.findOne({}).populate("user", "username");

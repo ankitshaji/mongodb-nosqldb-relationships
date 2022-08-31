@@ -7,6 +7,7 @@
     <title>Show</title>
   </head>
   <body>
+    <!--getting passed in the foundProduct with populated farm property but only specific piece of document-->
     <h1><%= product.name %></h1>
     <ul>
       <li>Price:$<%= product.price %></li>
@@ -17,6 +18,10 @@
         </a>
         <!--(http structured) GET request-->
         <!--adding ?queryString to /resource/?key=value-->
+      </li>
+      <li>
+        Farm Name:
+        <a href="/farms/<%=product.farm._id%>"><%=product.farm.name%></a>
       </li>
     </ul>
     <a href="/products">Back to Index</a>
