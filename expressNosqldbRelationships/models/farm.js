@@ -7,39 +7,30 @@ const { Schema: SchemaClassObject } = mongoose; //mongoose.Schema = SchemaClassO
 //dont need to connect nodejs runtime app to mongod server port since we are going to export model to where its already connected
 
 //****************************************************************************************
-//mongodb(nosqldb) relationship - ONE TO BILLIONS -
-//each user property in all document in  child collection(tweets) contains id references to parent collection(users)
+//mongodb(nosqldb) relationship - ONE TO MANY -
+//each products property in all document in farms collection contains id references to documents in products collection
 //the same relationship in a sqldb requires 2 seperate entities
 //***************************************************************************************
 
 //*********************************************************************************
-//CHILD MODEL - ProductClassObject ie(Model) - represents the (products) collection
+//PARENT MODEL - FarmClassObject ie(Model) - represents the (farms) collection
 //*********************************************************************************
 //mongooseObject.schemaMethod = SchemaClassObject(object)
 //schemaClassInstanceObject = new SchemaClassObject(object)
 //setting validtaions/constraints in object - shorthand vs longhand - [string] vs [{properties}] , String vs {type:String,required:true}
-//mongoose treats [{properties}] object as an another/embedded schemaInstanceObject - (we can prevent id creation)
-//category is type:String ,enum validator is a string array with pre fixed values season needs to use
-//farm property is of type:objectID - JS dosn't have that type so get from mongoose
-//ref option - tells mongoose which model to use when populating objectID
-
-const productSchemaInstanceObject = new SchemaClassObject({
-  name: { type: String, required: true },
-  price: { type: Number, require: true, min: 0 },
-  category: {
-    type: String,
-    lowercase: true,
-    enum: ["fruit", "vegetable", "dairy"],
-  },
-  farm: { type: SchemaClassObject.Types.ObjectId, ref: "Farm" },
+//mongoose treats [{properties}] object as an another/embedded schemaInstanceObject - we can prevent id creation
+//products property is an array of type:objectID - JS dosn't have that type so get from mongoose
+//ref option - tells mongoose which model to use when populating objectIDs
+const farmSchemaInstanceObject = new SchemaClassObject({
+  name: { type: String, required: [true, "Farm must have name"] },
+  city: String,
+  email: { type: String, required: [true, "Email is required"] },
+  products: [{ type: SchemaClassObject.Types.ObjectId, ref: "Product" }],
 });
 
-//creating productClassObject ie(Model) - represents a collection (products)
+//creating farmClassObject ie(Model) - represents a collection (farms)
 //mongooseObject.method("collectionNameSingular",collectionSchemaInstanceObject)
-const ProductClassObject = mongoose.model(
-  "Product",
-  productSchemaInstanceObject
-);
+const FarmClassObject = mongoose.model("Farm", farmSchemaInstanceObject);
 
 //exportsObject = productsClassObject ie(Model)
-module.exports = ProductClassObject;
+module.exports = FarmClassObject;
