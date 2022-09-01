@@ -3,7 +3,7 @@
 const mongoose = require("mongoose"); //mongooseObject //mongoose module
 //key to variable + rename variable - object destructuring
 const { Schema: SchemaClassObject } = mongoose; //mongoose.Schema = SchemaClassObject
-
+const ProductClassObject = require("../models/product"); //productClassObject(ie Model) //self created module/file needs "./"
 //dont need to connect nodejs runtime app to mongod server port since we are going to export model to where its already connected
 
 //****************************************************************************************
@@ -26,6 +26,44 @@ const farmSchemaInstanceObject = new SchemaClassObject({
   city: String,
   email: { type: String, required: [true, "Email is required"] },
   products: [{ type: SchemaClassObject.Types.ObjectId, ref: "Product" }],
+});
+
+// **************************************************************************************************************
+//adding mongoose middleware(hook)Callback on farmSchemaInstanceObject - //thus adding mongoose middleware(hook)Callback to model - (case1)modelInstanceObject/dataObject
+// mongoose middleware(hook)Callback executes code before or after a mongoose method
+// ****************************************************************************************************************
+//usefull to keep track of global count of mongoose method use
+
+//async middlewareCallback - type1
+//async modelMiddlwareCallbacks (this keyword refers to model instance)
+//async modelFunctions(mongoose methods) - save(),remove(),updateOne() etc
+//example - pre async modelMiddlwareCallbacks added to remove() modelFunctions(mongoose method) that removes other associated info
+
+//async middlewareCallback - type2
+//async queryMiddlewareCallbacks(this keyword refers to thenableObject) -
+//exectue pre/post async queryMiddlewareCallback when await/.then() is called on queryFunction(mongoose method)
+//-pre async queryMiddlewareCallbacks does not have access to the dataObject returned by the queryFunction(mongoose method)
+//-post async queryMiddlewareCallbacks does have access to the dataObject returned by the queryFunction(mongoose method)
+
+//no async vs async
+//middlewareCallback(next){//dostuff next()}  - needs next() execution to go to next middlewareCallback
+//OR
+//async middlewareCallback(){await doStuff()} - async default returns promiseObject - auto calls next() to go to next middlewareCallback
+
+//farmSchemaInstanceObject.method(argument -"mongooseMethod",async queryMiddlewareCallbacks to execute after mongooseMethod)
+//async(ie continues running outside code if it hits an await inside) callback implicit returns promiseObject(resolved,undefined) - can await a promiseObject inside
+//async function expression without an await is just a normal syncronous function expression
+//queryFunction(mongoose method) - findByIdAndDelete becomes findOneAndDelete
+farmSchemaInstanceObject.post("findOneAndDelete", async function (deletedFarm) {
+  //length = 0 is falsey
+  if (deletedFarm.products.length) {
+    //we use the passed in deletedFarm(ie document)argument to find and delete all assosiated documents in the products array property of deletedFarm(ie document)
+    //queries (products)collection of (farmStanddb3)db for all documents that match queryObject and deletes them
+    //queryObject contains queryOperator - $in
+    const messageObject = await ProductClassObject.deleteMany({
+      _id: { $in: deletedFarm.products },
+    });
+  }
 });
 
 //creating farmClassObject ie(Model) - represents a collection (farms)

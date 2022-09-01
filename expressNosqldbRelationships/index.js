@@ -106,6 +106,26 @@ app.get("/farms/:id", async (req, res) => {
   res.render("farms/show", { farm: foundFarm }); //passing in foundFarm with products property populated
 });
 
+//route 7
+//httpMethod=DELETE,path/resource-/farms/:id  -(pattern match) //:id is a path variable
+//(DELETE) name-destroy,purpose-delete single specific document in (farms)collection of (farmStanddb3)db
+//appObject.method(pathString,async middlewareCallback)
+app.delete("/farms/:id", async (req, res) => {
+  const { id } = req.params;
+  // ******************************************************************************
+  //DELETE - querying a collection(products) for a document by id then deleting it
+  // ******************************************************************************
+  //FarmClassObject.method(idString) ie modelClassObject.method() - same as - db.farms.findOneAndDelete(({_id:"12345"})
+  //queries (farms)collection of (farmStanddb3)db for single document by idString and deletes the document
+  const deletedFarm = await FarmClassObject.findByIdAndDelete(id); //deletedFarm = dataObject ie single first matching jsObject(document) that was deleted
+  //exectue pre/post async queryMiddlewareCallback when await/.then() is called on queryFunction(mongooseMethod)
+  //we set up a mongoose post async queryMiddlewareCallback for the findByIdAndDelete mongoose method
+  //post async queryMiddlewareCallback gets passed in the deletedFarm as argument from here
+  //we use the passed in deletedFarm(ie document)argument to find and delete all assosiated documents in the products array property of deletedFarm(ie document)
+
+  res.redirect("/farms");
+});
+
 //***************
 //Nested routing
 //***************
